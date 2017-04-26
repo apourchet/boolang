@@ -9,6 +9,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestParseEmptyString(t *testing.T) {
+	tree, err := boolang.Parse("")
+	assert.Equal(t, boolang.ErrorSyntax, err)
+	assert.Nil(t, tree)
+}
+
 func TestLeafOnly(t *testing.T) {
 	tree, err := boolang.Parse("A == 1")
 	assert.Nil(t, err)
