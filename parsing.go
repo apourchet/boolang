@@ -2,7 +2,7 @@ package boolang
 
 import "strings"
 
-func Parse(program string) (BoolangAST, error) {
+func Parse(program string) (AST, error) {
 	program = strings.Replace(program, "&&", "&", -1)
 	program = strings.Replace(program, "||", "|", -1)
 	valid := checkParens(program)
@@ -53,7 +53,7 @@ func tokenize(program string) []string {
 	return ret
 }
 
-func buildTree(tokens []string) (BoolangAST, error) {
+func buildTree(tokens []string) (AST, error) {
 	if len(tokens) == 0 {
 		return nil, ErrorSyntax
 	} else if len(tokens) == 1 {

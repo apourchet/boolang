@@ -13,24 +13,24 @@ var (
 type EvalFunc func(*Leaf, ...interface{}) (bool, error)
 type WalkFunc func(*Leaf)
 
-type BoolangAST interface {
+type AST interface {
 	Eval(EvalFunc, ...interface{}) (bool, error)
 	Walk(WalkFunc)
 	String() string
 }
 
 type NotAST struct {
-	center BoolangAST
+	center AST
 }
 
 type AndAST struct {
-	left  BoolangAST
-	right BoolangAST
+	left  AST
+	right AST
 }
 
 type OrAST struct {
-	left  BoolangAST
-	right BoolangAST
+	left  AST
+	right AST
 }
 
 type Leaf struct {
