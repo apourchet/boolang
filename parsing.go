@@ -57,7 +57,7 @@ func buildTree(tokens []string) (BoolangAST, error) {
 	if len(tokens) == 0 {
 		return nil, ErrorSyntax
 	} else if len(tokens) == 1 {
-		return &Leaf{tokens[0]}, nil
+		return NewLeaf(tokens[0]), nil
 	}
 
 	orIndex := findToken(tokens, "|")

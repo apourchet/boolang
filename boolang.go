@@ -38,6 +38,12 @@ type Leaf struct {
 	Metadata interface{}
 }
 
+func NewLeaf(content string) *Leaf {
+	leaf := &Leaf{}
+	leaf.Content = content
+	return leaf
+}
+
 // String
 func (t *NotAST) String() string {
 	return "Not(" + t.center.String() + ")"
