@@ -164,3 +164,10 @@ func TestEvalError(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.False(t, val)
 }
+
+// Benchmarking tests
+func BenchmarkParsing(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		boolang.Parse("(false || true) && (error || error && error) || !(error)")
+	}
+}

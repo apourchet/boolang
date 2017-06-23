@@ -16,12 +16,12 @@ func Parse(program string) (AST, error) {
 
 func tokenize(program string) []string {
 	tokens := []string{}
-	current_token := ""
+	current_token := []byte{}
 	for index := 0; index < len(program); index++ {
 		char := program[index]
 		if char == '(' || char == '!' || char == '&' || char == '|' {
-			tokens = append(tokens, current_token)
-			current_token = ""
+			tokens = append(tokens, string(current_token))
+			current_token = []byte{}
 		}
 		if char == '(' {
 			end := matchingParens(program[index:]) + index
@@ -37,12 +37,12 @@ func tokenize(program string) []string {
 		} else if char == '!' {
 			tokens = append(tokens, "!")
 		} else {
-			current_token += string(char)
+			current_token = append(current_token, char)
 		}
 	}
 
 	// Remove empty tokens
-	tokens = append(tokens, current_token)
+	tokens = append(tokens, string(current_token))
 	ret := []string{}
 	for _, token := range tokens {
 		if strings.Trim(token, " ") != "" {
