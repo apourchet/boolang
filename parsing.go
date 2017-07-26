@@ -2,6 +2,14 @@ package boolang
 
 import "strings"
 
+func MustParse(program string) AST {
+	tree, err := Parse(program)
+	if err != nil {
+		panic(err)
+	}
+	return tree
+}
+
 func Parse(program string) (AST, error) {
 	program = strings.Replace(program, "&&", "&", -1)
 	program = strings.Replace(program, "||", "|", -1)
