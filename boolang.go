@@ -10,6 +10,10 @@ var (
 	ErrorSyntax           = fmt.Errorf("Syntax Error")
 )
 
+var _ AST = &NotAST{}
+var _ AST = &AndAST{}
+var _ AST = &OrAST{}
+
 type EvalFunc func(*Leaf, ...interface{}) (bool, error)
 type WalkFunc func(*Leaf)
 
