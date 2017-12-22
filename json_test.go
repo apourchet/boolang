@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/apourchet/boolang"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseJson(t *testing.T) {
@@ -14,11 +14,11 @@ func TestParseJson(t *testing.T) {
 	}
 	var content = []byte(`{"ast":"A==1 && B == 2"}`)
 	err := json.Unmarshal(content, &data)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 
 	counter := 0
 	data.AST.Walk(func(l *boolang.Leaf) { counter += 1 })
-	assert.Equal(t, 2, counter)
+	require.Equal(t, 2, counter)
 }
 
 func TestParseJsonPtr(t *testing.T) {
@@ -27,11 +27,11 @@ func TestParseJsonPtr(t *testing.T) {
 	}
 	var content = []byte(`{"ast":"A==1 && B == 2"}`)
 	err := json.Unmarshal(content, &data)
-	assert.Nil(t, err)
+	require.Nil(t, err)
 
 	counter := 0
 	data.AST.Walk(func(l *boolang.Leaf) { counter += 1 })
-	assert.Equal(t, 2, counter)
+	require.Equal(t, 2, counter)
 }
 
 func TestParseJsonError(t *testing.T) {
@@ -40,5 +40,5 @@ func TestParseJsonError(t *testing.T) {
 	}
 	var content = []byte(`{"ast":"A==1 &&) B == 2"}`)
 	err := json.Unmarshal(content, &data)
-	assert.NotNil(t, err)
+	require.NotNil(t, err)
 }

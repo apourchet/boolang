@@ -1,7 +1,5 @@
 package boolang
 
-import "strings"
-
 func MustParse(program string) AST {
 	tree, err := Parse(program)
 	if err != nil {
@@ -11,8 +9,6 @@ func MustParse(program string) AST {
 }
 
 func Parse(program string) (AST, error) {
-	program = strings.Replace(program, "&&", "&", -1)
-	program = strings.Replace(program, "||", "|", -1)
 	valid := checkParens(program)
 	if !valid {
 		return nil, ErrorMismatchedParens
@@ -23,42 +19,8 @@ func Parse(program string) (AST, error) {
 }
 
 func tokenize(program string) []string {
-	tokens := []string{}
-	current_token := []byte{}
-	for index := 0; index < len(program); index++ {
-		char := program[index]
-		if char == '(' || char == '!' || char == '&' || char == '|' {
-			tokens = append(tokens, string(current_token))
-			current_token = []byte{}
-		}
-		if char == '(' {
-			end := matchingParens(program[index:]) + index
-			inners := tokenize(program[index+1 : end])
-			tokens = append(tokens, "(")
-			tokens = append(tokens, inners...)
-			tokens = append(tokens, ")")
-			index = end
-		} else if char == '&' {
-			tokens = append(tokens, "&")
-		} else if char == '|' {
-			tokens = append(tokens, "|")
-		} else if char == '!' {
-			tokens = append(tokens, "!")
-		} else {
-			current_token = append(current_token, char)
-		}
-	}
-
-	// Remove empty tokens
-	tokens = append(tokens, string(current_token))
-	ret := []string{}
-	for _, token := range tokens {
-		if strings.Trim(token, " ") != "" {
-			ret = append(ret, token)
-		}
-	}
-
-	return ret
+	tokenizer := NewTokenizer(program)
+	return tokenizer.Tokenize()
 }
 
 func buildTree(tokens []string) (AST, error) {
@@ -68,7 +30,7 @@ func buildTree(tokens []string) (AST, error) {
 		return NewLeaf(tokens[0]), nil
 	}
 
-	orIndex := findToken(tokens, "|")
+	orIndex := findToken(tokens, "||")
 	if orIndex == 0 || orIndex == len(tokens)-1 {
 		return nil, ErrorSyntax
 	} else if orIndex > 0 {
@@ -83,7 +45,7 @@ func buildTree(tokens []string) (AST, error) {
 		return &OrAST{left, right}, nil
 	}
 
-	andIndex := findToken(tokens, "&")
+	andIndex := findToken(tokens, "&&")
 	if andIndex == 0 || andIndex == len(tokens)-1 {
 		return nil, ErrorSyntax
 	} else if andIndex > 0 {
