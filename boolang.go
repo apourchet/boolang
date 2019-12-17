@@ -21,6 +21,7 @@ type AST interface {
 	Eval(EvalFunc, ...interface{}) (bool, error)
 	Walk(WalkFunc)
 	String() string
+	JSON() string
 }
 
 type NotAST struct {
@@ -63,6 +64,23 @@ func (t *AndAST) String() string {
 
 func (t *Leaf) String() string {
 	return "Leaf(" + strings.Trim(t.Content, " ") + ")"
+}
+
+// JSON
+func (t *NotAST) JSON() string {
+	return "!(" + t.center.JSON() + ")"
+}
+
+func (t *OrAST) JSON() string {
+	return "((" + t.left.JSON() + ") || (" + t.right.JSON() + "))"
+}
+
+func (t *AndAST) JSON() string {
+	return "((" + t.left.JSON() + ") && (" + t.right.JSON() + "))"
+}
+
+func (t *Leaf) JSON() string {
+	return "(" + strings.Trim(t.Content, " ") + ")"
 }
 
 // Walk

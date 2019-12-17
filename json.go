@@ -1,6 +1,8 @@
 package boolang
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 var _ AST = &JsonAST{}
 
@@ -20,5 +22,5 @@ func (ast *JsonAST) UnmarshalJSON(b []byte) error {
 }
 
 func (ast JsonAST) MarshalJSON() ([]byte, error) {
-	return []byte(ast.String()), nil
+	return []byte(`"` + ast.JSON() + `"`), nil
 }
